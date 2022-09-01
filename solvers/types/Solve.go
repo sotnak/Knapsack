@@ -6,4 +6,4 @@ import (
 )
 
 type Job func(conf *s.Configuration, index int)
-type GoJob func(limit int, solution *s.Configuration, jobs *s.Stack, lock *sync.RWMutex, cond *sync.Cond) Job
+type GetJob func(limit int, solution *s.Configuration, jobs *s.Stack, lock *sync.RWMutex, cond *sync.Cond) Job

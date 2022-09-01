@@ -33,7 +33,7 @@ func DoubleCheck(condition func() bool, than func(), els func(), lock *sync.RWMu
 	}
 }
 
-func StartRoutines(getJob t.GoJob,
+func StartRoutines(getJob t.GetJob,
 	length int, limit int, solution *s.Configuration, numOfRoutines int) {
 
 	rwLock := &sync.RWMutex{}
