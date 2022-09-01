@@ -24,31 +24,6 @@ func BruteSolve(limit int, initConf *s.Configuration, index int, solution *s.Con
 	BruteSolve(limit, conf1, index+1, solution)
 }
 
-/*
-func BruteSolveJob(initConf *u.Configuration, index int, solution *u.Configuration, jobs *u.Stack, lock *sync.RWMutex, cond *sync.Cond) {
-
-	if index >= initConf.Len() {
-		u.DoubleCheck(func() bool { return initConf.Weight <= limit && initConf.Value > solution.Value },
-			func() { solution.Copy(initConf) }, func() {}, lock, false)
-		return
-	}
-
-	conf0 := initConf.Clone()
-	conf1 := initConf.Clone()
-	conf1.AddElement(index)
-
-	if initConf.Len()-index > u.HeightLimit {
-		cond.L.Lock()
-		jobs.Push(func() { BruteSolveJob(conf0, index+1, solution, jobs, lock, cond) })
-		cond.L.Unlock()
-		cond.Signal()
-	} else {
-		BruteSolveJob(conf0, index+1, solution, jobs, lock, cond)
-	}
-	BruteSolveJob(conf1, index+1, solution, jobs, lock, cond)
-}
-*/
-
 func GetBruteSolveJob(limit int, solution *s.Configuration, jobs *s.Stack, lock *sync.RWMutex, cond *sync.Cond) t.Job {
 	var job t.Job
 

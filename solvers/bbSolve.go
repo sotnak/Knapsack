@@ -41,45 +41,6 @@ func BBsolve(limit int, initConf *s.Configuration, index int, solution *s.Config
 	BBsolve(limit, conf1, index+1, solution)
 }
 
-/*
-func BBsolveJob(initConf *s.Configuration, index int, solution *s.Configuration, jobs *s.Stack, lock *sync.RWMutex, cond *sync.Cond) {
-
-	if initConf.Weight > limit {
-		return
-	}
-
-	if index >= initConf.Len() {
-		s.DoubleCheck(func() bool { return initConf.Value > solution.Value },
-			func() { solution.Copy(initConf) }, func() {}, lock, false)
-		return
-	}
-
-	var possible bool
-	ub := upperBound(initConf.Value, index, initConf.Values)
-
-	s.DoubleCheck(func() bool { return ub < solution.Value },
-		func() { possible = false }, func() { possible = true }, lock, true)
-
-	if !possible {
-		return
-	}
-
-	conf0 := initConf.Clone()
-	conf1 := initConf.Clone()
-	conf1.AddElement(index)
-
-	if initConf.Len()-index > s.HeightLimit {
-		cond.L.Lock()
-		jobs.Push(func() { BBsolveJob(conf0, index+1, solution, jobs, lock, cond) })
-		cond.L.Unlock()
-		cond.Signal()
-	} else {
-		BBsolveJob(conf0, index+1, solution, jobs, lock, cond)
-	}
-	BBsolveJob(conf1, index+1, solution, jobs, lock, cond)
-}
-*/
-
 func GetBBSolveJob(limit int, solution *s.Configuration, jobs *s.Stack, lock *sync.RWMutex, cond *sync.Cond) t.Job {
 
 	var job t.Job
