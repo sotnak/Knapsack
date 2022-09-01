@@ -12,11 +12,6 @@ import (
 	s "main/utils/structs"
 )
 
-var values []int
-var weights []int
-
-var limit int
-
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
@@ -25,10 +20,10 @@ func main() {
 
 	length, _ := strconv.Atoi(os.Args[3])
 	vals := os.Args[5:]
-	limit, _ = strconv.Atoi(os.Args[4])
+	limit, _ := strconv.Atoi(os.Args[4])
 
-	values = make([]int, length)
-	weights = make([]int, length)
+	values := make([]int, length)
+	weights := make([]int, length)
 
 	for index, val := range vals {
 		if index%2 == 0 {
