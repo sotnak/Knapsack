@@ -44,7 +44,7 @@ func StartRoutines(getJob t.GetJob,
 
 	cond := sync.NewCond(&sync.Mutex{})
 
-	jobs := s.NewStack()
+	jobs := s.NewStack[func()]()
 
 	solve := getJob(limit, solution, jobs, rwLock, cond)
 	jobs.Push(func() { solve(initConf, 0) })
@@ -67,7 +67,7 @@ func StartRoutines(getJob t.GetJob,
 	wg.Wait()
 }
 
-func routine(id int, jobs *s.Stack, waiting *int, numOfRoutines int, cond *sync.Cond) {
+func routine(id int, jobs *s.Stack[func()], waiting *int, numOfRoutines int, cond *sync.Cond) {
 
 	var job func()
 	job = nil

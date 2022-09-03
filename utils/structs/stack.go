@@ -1,27 +1,27 @@
 package structs
 
-type Stack struct {
-	head   *Node
+type Stack[T any] struct {
+	head   *Node[T]
 	length int
 }
 
-type Node struct {
+type Node[T any] struct {
 	elem func()
-	next *Node
+	next *Node[T]
 }
 
-func NewStack() *Stack {
-	return &Stack{nil, 0}
+func NewStack[T any]() *Stack[T] {
+	return &Stack[T]{nil, 0}
 }
 
-func (this *Stack) Push(elem func()) {
-	node := &Node{elem, this.head}
+func (this *Stack[T]) Push(elem func()) {
+	node := &Node[T]{elem, this.head}
 
 	this.head = node
 	this.length++
 }
 
-func (this *Stack) Pop() func() {
+func (this *Stack[T]) Pop() func() {
 	if this.length == 0 {
 		panic("empty stack")
 	}
@@ -35,6 +35,6 @@ func (this *Stack) Pop() func() {
 	return ret
 }
 
-func (this *Stack) Empty() bool {
+func (this *Stack[T]) Empty() bool {
 	return this.length <= 0
 }

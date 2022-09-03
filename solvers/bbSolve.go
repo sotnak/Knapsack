@@ -41,7 +41,7 @@ func BBsolve(limit int, initConf *s.Configuration, index int, solution *s.Config
 	BBsolve(limit, conf1, index+1, solution)
 }
 
-func GetBBSolveJob(limit int, solution *s.Configuration, jobs *s.Stack, lock *sync.RWMutex, cond *sync.Cond) t.Job {
+func GetBBSolveJob(limit int, solution *s.Configuration, jobs *s.Stack[func()], lock *sync.RWMutex, cond *sync.Cond) t.Job {
 
 	var job t.Job
 
