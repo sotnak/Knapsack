@@ -10,8 +10,7 @@ type Configuration struct {
 	Weight int
 	Value  int
 
-	Values  *[]int
-	Weights *[]int
+	Items *[]Item
 }
 
 func (this *Configuration) ToString() string {
@@ -37,8 +36,8 @@ func (configuration *Configuration) Len() int {
 	return len(configuration.Arr)
 }
 
-func NewConf(size int, values *[]int, weights *[]int) *Configuration {
-	return &Configuration{make([]bool, size), 0, 0, values, weights}
+func NewConf(size int, items *[]Item) *Configuration {
+	return &Configuration{make([]bool, size), 0, 0, items}
 }
 
 func (this *Configuration) AddElement(index int) {
@@ -48,12 +47,12 @@ func (this *Configuration) AddElement(index int) {
 
 	this.Arr[index] = true
 
-	this.Value += (*this.Values)[index]
-	this.Weight += (*this.Weights)[index]
+	this.Value += (*this.Items)[index].Value
+	this.Weight += (*this.Items)[index].Weight
 }
 
 func (this *Configuration) Clone() *Configuration {
-	res := NewConf(this.Len(), this.Values, this.Weights)
+	res := NewConf(this.Len(), this.Items)
 
 	res.Copy(this)
 	return res
@@ -63,7 +62,6 @@ func (this *Configuration) Copy(other *Configuration) *Configuration {
 	copy(this.Arr, other.Arr)
 	this.Value = other.Value
 	this.Weight = other.Weight
-	this.Values = other.Values
-	this.Weights = other.Weights
+	this.Items = other.Items
 	return this
 }

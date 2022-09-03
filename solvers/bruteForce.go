@@ -24,7 +24,7 @@ func BruteSolve(limit int, initConf *s.Configuration, index int, solution *s.Con
 	BruteSolve(limit, conf1, index+1, solution)
 }
 
-func GetBruteSolveJob(limit int, solution *s.Configuration, jobs *s.Stack[func()], lock *sync.RWMutex, cond *sync.Cond) t.Job {
+func GetBruteSolveJob(limit int, solution *s.Configuration, jobs s.Container[func()], lock *sync.RWMutex, cond *sync.Cond) t.Job {
 	var job t.Job
 
 	job = func(conf *s.Configuration, index int) {

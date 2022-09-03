@@ -7,12 +7,12 @@ import (
 	"sync"
 )
 
-func upperBound(current int, index int, values *[]int) int {
-	res := current
+func upperBound(index int, conf *s.Configuration) int {
+	res := conf.Value
 
-	for i, v := range *values {
+	for i, v := range *conf.Items {
 		if i >= index {
-			res += v
+			res += v.Value
 		}
 	}
 
@@ -22,7 +22,7 @@ func upperBound(current int, index int, values *[]int) int {
 func BBsolve(limit int, initConf *s.Configuration, index int, solution *s.Configuration) {
 
 	if initConf.Weight > limit ||
-		upperBound(initConf.Value, index, initConf.Values) < solution.Value {
+		upperBound(index, initConf) < solution.Value {
 		return
 	}
 
@@ -41,7 +41,7 @@ func BBsolve(limit int, initConf *s.Configuration, index int, solution *s.Config
 	BBsolve(limit, conf1, index+1, solution)
 }
 
-func GetBBSolveJob(limit int, solution *s.Configuration, jobs *s.Stack[func()], lock *sync.RWMutex, cond *sync.Cond) t.Job {
+func GetBBSolveJob(limit int, solution *s.Configuration, jobs s.Container[func()], lock *sync.RWMutex, cond *sync.Cond) t.Job {
 
 	var job t.Job
 
@@ -57,7 +57,7 @@ func GetBBSolveJob(limit int, solution *s.Configuration, jobs *s.Stack[func()], 
 		}
 
 		var possible bool
-		ub := upperBound(conf.Value, index, conf.Values)
+		ub := upperBound(index, conf)
 
 		u.DoubleCheck(func() bool { return ub < solution.Value },
 			func() { possible = false }, func() { possible = true }, lock, true)

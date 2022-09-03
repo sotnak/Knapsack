@@ -10,8 +10,10 @@ type stackNode[T any] struct {
 	next *stackNode[T]
 }
 
-func NewStack[T any]() *Stack[T] {
-	return &Stack[T]{nil, 0}
+func NewStack[T any]() Container[T] {
+	var container Container[T] = &Stack[T]{nil, 0}
+
+	return container
 }
 
 func (this *Stack[T]) Push(elem T) {
@@ -37,4 +39,8 @@ func (this *Stack[T]) Pop() T {
 
 func (this *Stack[T]) Empty() bool {
 	return this.length <= 0
+}
+
+func (this *Stack[T]) Len() int {
+	return this.length
 }

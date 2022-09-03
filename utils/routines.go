@@ -33,18 +33,24 @@ func DoubleCheck(condition func() bool, than func(), els func(), lock *sync.RWMu
 	}
 }
 
-func StartRoutines(getJob t.GetJob,
-	length int, limit int, solution *s.Configuration, numOfRoutines int) {
+func StartRoutines(getJob t.GetJob, newContainer func() s.Container[func()],
+	length int, limit int, items *[]s.Item, numOfRoutines int) *s.Configuration {
 
 	rwLock := &sync.RWMutex{}
 
-	initConf := s.NewConf(length, solution.Values, solution.Weights)
+	var myItems []s.Item = make([]s.Item, length)
+
+	copy(myItems, *items)
+
+	initConf := s.NewConf(length, &myItems)
+
+	solution := s.NewConf(length, &myItems)
 
 	waiting := 0
 
 	cond := sync.NewCond(&sync.Mutex{})
 
-	jobs := s.NewStack[func()]()
+	jobs := newContainer()
 
 	solve := getJob(limit, solution, jobs, rwLock, cond)
 	jobs.Push(func() { solve(initConf, 0) })
@@ -65,9 +71,15 @@ func StartRoutines(getJob t.GetJob,
 	}
 
 	wg.Wait()
+
+	if !jobs.Empty() {
+		panic("Routines terminated")
+	}
+
+	return solution
 }
 
-func routine(id int, jobs *s.Stack[func()], waiting *int, numOfRoutines int, cond *sync.Cond) {
+func routine(id int, jobs s.Container[func()], waiting *int, numOfRoutines int, cond *sync.Cond) {
 
 	var job func()
 	job = nil

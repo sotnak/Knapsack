@@ -22,15 +22,15 @@ func main() {
 	vals := os.Args[5:]
 	limit, _ := strconv.Atoi(os.Args[4])
 
-	values := make([]int, length)
-	weights := make([]int, length)
+	items := make([]s.Item, length)
 
-	for index, val := range vals {
-		if index%2 == 0 {
-			weights[int(index/2)], _ = strconv.Atoi(val)
-		} else {
-			values[int(index/2)], _ = strconv.Atoi(val)
-		}
+	for i := 0; i < length*2; i += 2 {
+		var index int = i / 2
+
+		weight, _ := strconv.Atoi(vals[i])
+		value, _ := strconv.Atoi(vals[i+1])
+
+		items[index] = s.Item{Value: value, Weight: weight}
 	}
 
 	var solution *s.Configuration
@@ -41,20 +41,18 @@ func main() {
 
 	switch solver {
 	case "brute":
-		solution = s.NewConf(length, &values, &weights)
 
 		start = time.Now()
 
-		u.StartRoutines(solvers.GetBruteSolveJob, length, limit, solution, runtime.NumCPU())
+		solution = u.StartRoutines(solvers.GetBruteSolveJob, s.NewQueue[func()], length, limit, &items, runtime.NumCPU())
 		elapsed = time.Since(start)
 		break
 
 	case "bb":
-		solution = s.NewConf(length, &values, &weights)
 
 		start = time.Now()
 
-		u.StartRoutines(solvers.GetBBSolveJob, length, limit, solution, runtime.NumCPU())
+		solution = u.StartRoutines(solvers.GetBBSolveJob, s.NewQueue[func()], length, limit, &items, runtime.NumCPU())
 		elapsed = time.Since(start)
 		break
 
