@@ -64,7 +64,7 @@ func main() {
 	if solution != nil {
 		fmt.Print(id + " ")
 		fmt.Print(solution.ToString() + " ")
-		fmt.Println(elapsed)
+		fmt.Println(elapsed.Seconds())
 	} else {
 		fmt.Println("FAILED")
 	}
